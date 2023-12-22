@@ -63,6 +63,7 @@
             handleVideoReadyFired = true;
             document.querySelector(".pzp-pc__viewmode-button").click();
             document.querySelector('[class^="live_chatting_header_button__"]').click();
+            player.muted = true;
         }
 
         waitForElement("video.webplayer-internal-video", function (node) {
