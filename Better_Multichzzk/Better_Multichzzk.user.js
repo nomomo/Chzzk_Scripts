@@ -5,7 +5,7 @@
 // @description  Better player for multichzzk
 // @author       Nomo
 // @match        https://multichzzk.tv/*
-// @match        https://chzzk.naver.com/*?embed
+// @match        https://chzzk.naver.com/*?multichzzk
 // @supportURL   https://github.com/nomomo/Chzzk_Scripts/issues
 // @homepage     https://github.com/nomomo/Chzzk_Scripts/
 // @downloadURL  https://raw.githubusercontent.com/nomomo/Chzzk_Scripts/main/better_multichzzk/Better_Multichzzk.user.js
@@ -22,8 +22,8 @@
         if (debug) console.log("iframes", iframes);
 
         iframes.forEach(function (iframe) {
-            if (iframe.src.indexOf('?embed') === -1) {
-                iframe.src = iframe.src + '?embed';
+            if (iframe.src.indexOf('?multichzzk') === -1) {
+                iframe.src = iframe.src + '?multichzzk';
             }
         });
     } else if (url.indexOf("//chzzk.naver.com/") !== -1) {
