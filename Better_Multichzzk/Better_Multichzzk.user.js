@@ -8,8 +8,8 @@
 // @match        https://chzzk.naver.com/*?multichzzk
 // @supportURL   https://github.com/nomomo/Chzzk_Scripts/issues
 // @homepage     https://github.com/nomomo/Chzzk_Scripts/
-// @downloadURL  https://raw.githubusercontent.com/nomomo/Chzzk_Scripts/main/better_multichzzk/Better_Multichzzk.user.js
-// @updateURL    https://raw.githubusercontent.com/nomomo/Chzzk_Scripts/main/better_multichzzk/Better_Multichzzk.user.js
+// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/Better_Multichzzk/Better_Multichzzk.user.js
+// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/Better_Multichzzk/Better_Multichzzk.user.js
 // ==/UserScript==
 
 (function () {
