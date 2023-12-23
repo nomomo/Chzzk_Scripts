@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Better_Multichzzk
 // @namespace    Better_Multichzzk
-// @version      0.0.2
+// @version      0.0.3
 // @description  Better player for multichzzk
 // @author       Nomo
 // @match        https://multichzzk.tv/*
@@ -22,7 +22,7 @@
         if (debug) console.log("iframes", iframes);
 
         iframes.forEach(function (iframe) {
-            if (iframe.src.indexOf('?multichzzk') === -1) {
+            if (iframe.src.indexOf('//chzzk.naver.com/') !== -1 && iframe.src.indexOf('?multichzzk') === -1) {
                 iframe.src = iframe.src + '?multichzzk';
             }
         });
