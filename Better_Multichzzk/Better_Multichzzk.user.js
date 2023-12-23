@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Better_Multichzzk
 // @namespace    Better_Multichzzk
-// @version      0.0.1
+// @version      0.0.2
 // @description  Better player for multichzzk
 // @author       Nomo
 // @match        https://multichzzk.tv/*
@@ -58,13 +58,25 @@
         let player = undefined;
         let handleVideoReadyFired = false;
 
-        function handleVideoReady() {
+        let handleVideoReady = function(){
             if (handleVideoReadyFired) return;
             handleVideoReadyFired = true;
-            document.querySelector(".pzp-pc__viewmode-button").click();
+            let viewmode_buttons = document.querySelectorAll(".pzp-pc__viewmode-button");
+            if(viewmode_buttons.length == 1){
+                viewmode_buttons[0].click();
+            }
+            else{
+                // 치즈나이프와의 충돌 방지
+                for (let i = 0; i < viewmode_buttons.length; i++) {
+                    let button = viewmode_buttons[i];
+                    if (button.getAttribute('aria-label') === '넓은 화면') {
+                        button.click();
+                        break;
+                    }
+                }
+            }
             document.querySelector('[class^="live_chatting_header_button__"]').click();
-            player.muted = true;
-        }
+        };
 
         waitForElement("video.webplayer-internal-video", function (node) {
             if (debug) console.log("found video player", node);
