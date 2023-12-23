@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Better_Multichzzk
 // @namespace    Better_Multichzzk
-// @version      0.0.3
+// @version      0.0.4
 // @description  Better player for multichzzk
 // @author       Nomo
 // @match        https://multichzzk.tv/*
@@ -89,6 +89,7 @@
                     handleVideoReady();
                 });
             }
+            player.muted = true;
         });
 
     }
