@@ -1,6 +1,6 @@
 # CHZZK_sign_in_iframe
 
-- iframe(embed)로 삽입된 CHZZK 페이지에서 로그인이 유지되도록 합니다.
+- 본 스크립트는 iframe(embed)로 삽입된 CHZZK 페이지에서 로그인이 유지되도록 해줍니다.
 - 로그인이 유지되므로 iframe(embed)로 삽입된 CHZZK 페이지에서 연령 인증 스트림 시청, 채팅이 가능합니다.
 - 로그인은 chzzk.naver.com 에서 직접해야 합니다.
 - **본 스크립트는 Chrome 계열 브라우저의 경우 Tampermonkey Beta 버전에서만 동작합니다. (스크립트 매니저가 GM_cookie 기능을 지원해야 함)**
