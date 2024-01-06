@@ -46,6 +46,10 @@ multichzzk.tv에서 자동으로 아래의 것들을 해줍니다.
 
 - 최초 커밋
 
+## License
+
+MIT
+
 ## Happy??
 
 <a href="https://www.buymeacoffee.com/nomomo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="60"></a>
