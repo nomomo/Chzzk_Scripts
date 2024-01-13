@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK_sign_in_iframe
 // @namespace    CHZZK_sign_in_iframe
-// @version      0.0.1
+// @version      0.0.2
 // @description  iframe 으로 삽입된 CHZZK 페이지에서 로그인이 유지되도록 합니다.
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -11,14 +11,14 @@
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_sign_in_iframe/CHZZK_sign_in_iframe.user.js
 // @grant        GM_cookie
 // @grant        GM.cookie
-// @run-at       document-end
+// @run-at       document-start
 // ==/UserScript==
 
-(async function () {
+(function () {
     'use strict';
 
-    var DEBUG = false;
-    const targetCookies = ["NID_AUT", "NID_SES", "NID_JKL"];
+    var DEBUG = true;
+    const targetCookies = ["NID_SES", "NID_AUT", "NID_JKL"];
 
     if (!GM.cookie) {
         console.log("GM.cookie is not supported.");
@@ -41,21 +41,32 @@
                         continue;
                     }
 
-                    if (DEBUG) console.log("Try to delete old cookie", cookies[0]);
-                    GM_cookie.delete(cookies[i], function () {
-                        
-                        cookies[i].sameSite = "no_restriction";
-                        cookies[i].secure = true;
-                        
-                        if (DEBUG) console.log("Try to set new cookie", cookies[0]);
-                        GM.cookie.set(cookies[i])
-                            .then(function () {
-                                if (DEBUG) console.log('set cookie done');
-                            }, function (error) {
-                                if (DEBUG) console.log('set cookie error', error);
-                            });
+                    // if (DEBUG) console.log("Try to delete old cookie", cookies[0]);
+                    // GM_cookie.delete(cookies[i], function () {
 
-                    })
+                    //     cookies[i].sameSite = "no_restriction";
+                    //     cookies[i].secure = true;
+
+                    //     if (DEBUG) console.log("Try to set new cookie", cookies[0]);
+                    //     GM.cookie.set(cookies[i])
+                    //         .then(function () {
+                    //             if (DEBUG) console.log('set cookie done');
+                    //         }, function (error) {
+                    //             if (DEBUG) console.log('set cookie error', error);
+                    //         });
+
+                    // })
+
+                    cookies[i].sameSite = "no_restriction";
+                    cookies[i].secure = true;
+
+                    if (DEBUG) console.log("Try to set new cookie", cookies[0]);
+                    GM.cookie.set(cookies[i])
+                        .then(function () {
+                        if (DEBUG) console.log('set cookie done');
+                    }, function (error) {
+                        if (DEBUG) console.log('set cookie error', error);
+                    });
                 }
             }
             else{
@@ -93,11 +104,15 @@
 
     // 전혀 상관없는 다른 창에서 쿠키 변경된 경우 때문에 문제 발생하는 경우를 방지
     if(!isTopWindow){
-        setInterval(function () {
-            for (const ck of targetCookies) {
-                setCookieSameSiteNone(ck);
-            }
-        }, 250);
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function(){
+                setInterval(function () {
+                    for (const ck of targetCookies) {
+                        setCookieSameSiteNone(ck);
+                    }
+                }, 250);
+            },2000);
+        });
     }
 
 })();
