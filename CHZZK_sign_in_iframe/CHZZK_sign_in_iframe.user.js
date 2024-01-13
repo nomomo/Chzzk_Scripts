@@ -17,7 +17,7 @@
 (function () {
     'use strict';
 
-    var DEBUG = true;
+    var DEBUG = false;
     const targetCookies = ["NID_SES", "NID_AUT", "NID_JKL"];
 
     if (!GM.cookie) {
