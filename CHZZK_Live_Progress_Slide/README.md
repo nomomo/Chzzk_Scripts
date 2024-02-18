@@ -3,6 +3,8 @@
 - Chzzk에서 라이브 스트림에 Progress Slide 를 표시합니다.
 - "실시간" 을 누르면 빨리감기 합니다.
 
+<img src="https://raw.githubusercontent.com/nomomo/Chzzk_Scripts/main/CHZZK_Live_Progress_Slide/preview.png" />
+
 ## Install
 
 설치 방법을 설명합니다.
