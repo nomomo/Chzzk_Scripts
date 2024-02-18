@@ -2,7 +2,7 @@
 // @name         CHZZK Live Progress Slider
 // @namespace    CHZZK_Live_Progress_Slider
 // @version      0.0.1
-// @description  Show the live progress slide on Chzzk
+// @description  Show the live progress slider on Chzzk
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
 // @supportURL   https://github.com/nomomo/Chzzk_Scripts/issues
