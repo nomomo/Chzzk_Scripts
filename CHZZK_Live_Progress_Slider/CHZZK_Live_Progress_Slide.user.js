@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         CHZZK Live Progress Slide
-// @namespace    CHZZK_Live_Progress_Slide
+// @name         CHZZK Live Progress Slider
+// @namespace    CHZZK_Live_Progress_Slider
 // @version      0.0.1
 // @description  Show the live progress slide on Chzzk
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
 // @supportURL   https://github.com/nomomo/Chzzk_Scripts/issues
 // @homepage     https://github.com/nomomo/Chzzk_Scripts/
-// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Live_Progress_Slide/CHZZK_Live_Progress_Slide.user.js
-// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Live_Progress_Slide/CHZZK_Live_Progress_Slide.user.js
+// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Live_Progress_Slider/CHZZK_Live_Progress_Slider.user.js
+// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Live_Progress_Slider/CHZZK_Live_Progress_Slider.user.js
 // @grant        GM_addStyle
 // ==/UserScript==
 
