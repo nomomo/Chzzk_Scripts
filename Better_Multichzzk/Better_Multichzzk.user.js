@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Better_Multichzzk
 // @namespace    Better_Multichzzk
-// @version      0.0.4
+// @version      0.0.5
 // @description  Better player for multichzzk
 // @author       Nomo
 // @match        https://multichzzk.tv/*
+// @match        https://mul.live/*
 // @match        https://chzzk.naver.com/*?multichzzk
 // @supportURL   https://github.com/nomomo/Chzzk_Scripts/issues
 // @homepage     https://github.com/nomomo/Chzzk_Scripts/
@@ -17,7 +18,7 @@
     let debug = false;
 
     let url = document.location.href;
-    if (url.indexOf("//multichzzk.tv/") !== -1) {
+    if (url.indexOf("//multichzzk.tv/") !== -1 || url.indexOf("//mul.live/") !== -1) {
         let iframes = document.querySelectorAll('iframe');
         if (debug) console.log("iframes", iframes);
 
