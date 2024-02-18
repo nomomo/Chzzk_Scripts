@@ -2,6 +2,7 @@
 
 - Chzzk에서 라이브 스트림에 Progress Slider 를 표시합니다.
 - "실시간" 을 누르면 빨리감기 합니다.
+- 로드된 비디오 버퍼 범위에서 탐색할 수 있습니다.
 
 <img src="https://raw.githubusercontent.com/nomomo/Chzzk_Scripts/main/CHZZK_Live_Progress_Slider/preview.png" />
 
