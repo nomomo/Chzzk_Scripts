@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Never Stop At Start
 // @namespace    CHZZK_Never_Stop_At_Start
-// @version      0.0.1
+// @version      0.0.2
 // @description  CHZZK_Never_Stop_At_Start
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -29,19 +29,10 @@
 
     document.arrive('.pzp-pc__video video', function() {
         const video = this;
-        let canPlay = false;
-        let time;
-
-        video.addEventListener('pause', function() {
-            let currentTime = new Date();
-            if(canPlay && currentTime - time < tol){
+        video.addEventListener('canplaythrough', function() {
+            if(video.paused){
                 video.play();
             }
-        }, { once: true });
-
-        video.addEventListener('canplay', function() {
-            canPlay = true;
-            time = new Date();
 
             // redundant
             setTimeout(function(){
@@ -50,7 +41,6 @@
                 }
             }, tol);
         }, { once: true });
-
     });
 
 })();
