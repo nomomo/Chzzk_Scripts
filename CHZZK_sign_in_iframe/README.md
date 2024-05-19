@@ -15,7 +15,12 @@
 
 - Chrome - [Tampermonkey Beta](https://chromewebstore.google.com/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf)
 
-### STEP 2. UserScript 설치
+### STEP 2. 개발자 모드 활성화
+
+- 2024년 5월부터 Tampermknkey를 사용하려면 개발자 모드를 활성화 해야합니다.
+- [chrome://extensions/](chrome://extensions/) 로 접속한 후, 우측 상단의 "개발자 모드"를 켜세요.
+
+### STEP 3. UserScript 설치
 
 - 유저스크립트 관리 확장기능 설치 후 아래의 링크를 클릭하세요. 이후 뜨는 창에서 "설치" 버튼을 눌러 스크립트를 설치합니다.
   - [https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_sign_in_iframe/CHZZK_sign_in_iframe.user.js](https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_sign_in_iframe/CHZZK_sign_in_iframe.user.js)
@@ -28,6 +33,7 @@
 ## 자주묻는 질문
 
 - Q: 안 돼요.<br />A: Chrome 계열 브라우저의 경우 Tampermonkey Beta 버전에 본 스크립트가 설치되었는지 확인하세요.
+- Q: 잘 되다가 갑자기 안 돼요.<br />A: 2024년 5월부터 Tampermknkey를 사용하려면 개발자 모드를 활성화 해야합니다. [chrome://extensions/](chrome://extensions/) 로 접속한 후, 우측 상단의 "개발자 모드"를 켜세요.
 - Q: 로그인은 어떻게 해요?<br />A: [chzzk.naver.com](https://chzzk.naver.com) 에서 하세요.
 - Q: 왜 Tampermonkey Beta 버전에 스크립트를 설치해야 하나요?<br >A: 기능 동작을 위해 스크립트 매니저에서 지원하는 GM_cookie 이라는 기능을 사용하여야 하는데, Chrome 계열 브라우저의 경우 Tampermonkey Beta 만 해당 기능을 지원합니다. 참고로 다른 브라우저의 경우 Tampermonkey 정식 버전에서도 GM_cookie 를 지원한다는데 테스트 해보지는 않았어요.
 - Q: 기존에 사용하던 Tampermonkey 정식 버전과 Beta 버전을 동시에 설치해서 사용해도 괜찮나요?<br />A: 괜찮습니다.
