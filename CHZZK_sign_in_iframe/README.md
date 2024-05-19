@@ -18,7 +18,7 @@
 ### STEP 2. 개발자 모드 활성화
 
 - 2024년 5월부터 Tampermknkey를 사용하려면 개발자 모드를 활성화 해야합니다.
-- [chrome://extensions/](chrome://extensions/) 로 접속한 후, 우측 상단의 "개발자 모드"를 켜세요.
+- **chrome://extensions** 로 접속한 후, 확장 프로그램 관리 페이지 우측 상단의 "개발자 모드"를 켜세요.
 
 ### STEP 3. UserScript 설치
 
