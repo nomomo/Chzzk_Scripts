@@ -709,7 +709,6 @@
     function getChannelNameFromList(item) {
         const nameElem = item.find('span[class^="name_text__"]').first();
         if (nameElem.length) {
-            console.log(nameElem.text());
             return nameElem.text().split('\n')[0];
         }
         return "Unknown";
@@ -726,7 +725,6 @@
                 const items = Array.from(componentList.children());
                 const newIndex = items.indexOf(evt.item);
                 var $prevElement = $(evt.item).prev();
-                console.log("newIndex", newIndex);
                 if (newIndex == 0 || ($prevElement.length && $prevElement.hasClass('pinned'))) {
                     $(evt.item).find('.star-icon').removeClass('gray').addClass('yellow');
                     $(evt.item).removeClass('ghost-gray');
