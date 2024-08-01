@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Favorite Streamer
 // @namespace    CHZZK_Favorite_Streamer
-// @version      0.0.1
+// @version      0.0.2
 // @description  즐겨찾는 스트리머를 목록 상단에 표시하는 스크립트
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -221,7 +221,7 @@
     margin: 0 5px;
 }
 .favorite-tab-setting-button {
-    float: right;
+    margin-left: auto;
     margin-right: 10px;
 }
 .modal-title {
@@ -273,7 +273,7 @@
     border-bottom-left-radius: 0px;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
-    margin-left: 0 !important;
+    margin-left: -4px !important;
     padding-left: 9px !important;
     padding-right: 9px !important;
     border-left: 1px solid var(--color-bg-01);
@@ -410,13 +410,14 @@
 
     // 즐겨찾기 버튼 추가 함수
     function addFavoriteTabButton(tabList) {
+        console.log("addFavoriteTabButton");
         starOnly = false;
         const followingContainer = $('[class^="following_container__"]');
         if (!followingContainer.length) return;
 
         followingContainer.removeClass('starOnly');
 
-        const tabItemClass = tabList.children().filter((_, child) => $(child).attr('class').startsWith('following_tab_item__')).attr('class');
+        const tabItemClass = tabList.children().filter((_, child) => $(child).attr('class').startsWith('button_tab_item__')).attr('class');
         const favoriteTabButton = $('<button>', {
             type: 'button',
             id: 'FAVORITE_ONLY',
@@ -427,7 +428,7 @@
         });
 
         // 일단 버튼 누를 때 favorite 선택 상태 끄기
-        $('[class^="following_tab_list__"] button').on('click', function() {
+        $('[class^="button_tab_list__"] button').on('click', function() {
             favoriteTabButton.attr('aria-selected', 'false');
             if (!liveBtnSimulated) {
                 starOnly = false;
@@ -437,7 +438,8 @@
         });
 
         // DOM
-        const liveButton = $('[class^="following_tab_list__"] button#LIVE');
+        console.log("Add favorite button");
+        const liveButton = $('[class^="button_tab_list__"] button#LIVE');
         liveButton.after(favoriteTabButton);
 
         // favorite 버튼 누른 경우
@@ -488,7 +490,7 @@
     }
 
     // Create tab buttons
-    $(document).arrive('[class^="following_tab_list__"]', { existing: true }, function() {
+    $(document).arrive('[class^="button_tab_list__"]', { existing: true }, function() {
         const tabList = $(this);
         addFavoriteTabButton(tabList);
     });
