@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Live Progress Slider
 // @namespace    CHZZK_Live_Progress_Slider
-// @version      0.0.1
+// @version      0.0.2
 // @description  Show the live progress slider on Chzzk
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -59,6 +59,32 @@
         }
 
         document.querySelector('body').classList.add("live");
+
+
+        // As of August 1, 2024, the VOD time display element has been completely removed for Live, so the element needs to be manually added.
+        // Check if the element with the class 'pzp-pc__vod-time' exists
+        if (!document.querySelector('.pzp-pc__vod-time')) {
+            // Find the container with the class 'pzp-pc-live-time--on'
+            const liveTimeContainer = document.querySelector('.pzp-pc-live-time--on');
+            if (liveTimeContainer) {
+                const newElement = document.createElement('div');
+                newElement.setAttribute('role', 'timer');
+                newElement.setAttribute('aria-live', 'off');
+                newElement.classList.add('pzp-pc-vod-time', 'pzp-pc__vod-time');
+                newElement.innerHTML = `
+                <span role="text" class="pzp-ui-text pzp-pc-vod-time__current-time">0:00</span>
+                <div class="pzp-pc-vod-time__bar"></div>
+                <span role="text" class="pzp-ui-text pzp-pc-vod-time__duration">0:00</span>`;
+
+                liveTimeContainer.parentNode.insertBefore(newElement, liveTimeContainer);
+
+                // hide "실시간"
+                // document.querySelector('.pzp-pc-live-time--on').style.display = 'none';
+            } else {
+                console.error('Element with class pzp-pc-live-time--on not found.');
+            }
+        }
+
 
         let slider = document.querySelector('.pzp-pc .pzp-pc__progress-slider');
         let progressPlayed = document.querySelector('.pzp-ui-progress__played');
