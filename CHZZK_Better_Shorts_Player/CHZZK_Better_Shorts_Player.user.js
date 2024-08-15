@@ -27,7 +27,7 @@
 }
 
 /* #app에 마우스가 올라가 있을 때만 표시 */
-#appt:hover .sp_progress_wrap,
+#app:hover .sp_progress_wrap,
 #app:hover .section_header,
 #app:hover .section_info {
     opacity: 1;
