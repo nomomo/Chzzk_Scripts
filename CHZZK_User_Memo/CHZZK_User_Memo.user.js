@@ -5,7 +5,7 @@
 // @description  치지직에 유저 메모 기능을 추가
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
-// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_User_Memo/
+// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_User_Memo/CHZZK_User_Memo.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_User_Memo/CHZZK_User_Memo.user.js
 // @grant        GM.setValue

@@ -5,7 +5,7 @@
 // @description  Chzzk 의 클립 보기 화면 개선
 // @author       Nomo
 // @match        https://m.naver.com/shorts/*
-// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_Better_Shorts_Player/
+// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Better_Shorts_Player/CHZZK_Better_Shorts_Player.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Better_Shorts_Player/CHZZK_Better_Shorts_Player.user.js
 // @require      https://cdn.jsdelivr.net/npm/arrive@2.4.1/minified/arrive.min.js

@@ -5,7 +5,7 @@
 // @description  즐겨찾는 스트리머를 목록 상단에 표시하는 스크립트
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
-// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_Favorite_Streamers/
+// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @run-at       document-start
