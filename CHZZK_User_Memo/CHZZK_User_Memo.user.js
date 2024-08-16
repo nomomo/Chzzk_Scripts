@@ -24,6 +24,7 @@
 (function($) {
     'use strict';
 
+    let debug = false
     let maxChatLogs = 30;
     let maxNicknameHistory = 5;
 
@@ -79,7 +80,7 @@
             return new OriginalWebSocket(url, protocols);
         }
 
-        console.log("Intercepted WebSocket connection to:", url);
+        if(debug) console.log("Intercepted WebSocket connection to:", url);
         const socket = new OriginalWebSocket(url, protocols);
 
         socket.addEventListener('message', async function(event) {
@@ -91,8 +92,8 @@
             if(!modifiedData){
                 modifiedData = event.data;
             }
-            //console.log(event.data);
-            //console.log("modifiedData", modifiedData)
+            //if(debug) console.log(event.data);
+            //if(debug) console.log("modifiedData", modifiedData)
 
             event.stopImmediatePropagation();
 
@@ -144,7 +145,7 @@
             let nickChanged = false;
             let oldnick = userData.parsedNickname;
             if (oldnick && userData.parsedNickname !== nickname) {
-                console.log(`nick changed. ${oldnick} -> ${nickname}`);
+                if(debug) console.log(`nick changed. ${oldnick} -> ${nickname}`);
                 nickChanged = true;
 
                 let stemp = `[닉변 감지:${oldnick} → ${nickname}] `;
@@ -175,7 +176,7 @@
                 messageDonate = jsonExtras.payAmount ? Number(jsonExtras.payAmount) : -1;
             }
 
-            //console.log(message);
+            //if(debug) console.log(message);
 
             if (!userData.nicknameHistory) {
                 userData.nicknameHistory = [];
@@ -499,7 +500,7 @@
     function showChatLogsModal(uid) {
         const userData = globalData[uid];
         if (!userData || !userData.chatLogs) return;
-        console.log("log", userData.chatLogs);
+        if(debug) console.log("log", userData.chatLogs);
     
         let contentHtml = `
             <div>
