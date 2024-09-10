@@ -23,7 +23,7 @@
 ### STEP 2. UserScript
 
 - 유저스크립트 관리 확장기능 설치 후 아래의 링크를 클릭하세요. 이후 뜨는 창에서 "설치" 버튼을 눌러 스크립트를 설치합니다.
-  - [https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Live_Progress_Slider/CHZZK_Live_Progress_Slider.user.js](https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Live_Progress_Slider/CHZZK_Live_Progress_Slider.user.js)
+  - [https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Max_Quality/CHZZK_Max_Quality.user.js](https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Max_Quality/CHZZK_Max_Quality.user.js)
 
 이것으로 설치는 끝입니다. 즐겁게 사용하세요~
 
