@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Restore Blind Chat
 // @namespace    CHZZK_Restore_Blind_Chat
-// @version      0.0.1
+// @version      0.0.2
 // @description  Restore original chat messages when they are hidden by the admin
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -21,6 +21,26 @@
         return element && Array.from(element.classList).some(className => className.startsWith(prefix));
     }
 
+    // Check and update whether autoscroll is currently active
+    let autoscroll = true;
+    function updatechatAutoScroll(){
+        const scrollButtonChattingElement = document.querySelector('[class*="live_chatting_scroll_button_chatting__"]');
+        if (scrollButtonChattingElement) {
+            autoscroll = false;
+        }
+        else {
+            autoscroll = true;
+        }
+    }
+    
+    // Scroll down the chatbox
+    function chatScrollToBottom() {
+        const chattingListWrapperElement = document.querySelector('[class*="live_chatting_list_wrapper__"]');
+        if (chattingListWrapperElement && autoscroll) {
+            chattingListWrapperElement.scrollTop = chattingListWrapperElement.scrollHeight + 1000000;
+        }
+    }
+
     // Function to observe individual chat elements for changes in attributes
     function observeChatAttributes(node) {
         if (node.nodeType === 1 && classStartsWith(node, 'live_chatting_message_container__')) {
@@ -35,7 +55,9 @@
                             if (parentElement && messageTextElem) {
                                 const originalMessage = parentElement.getAttribute('data-original-message');
                                 if (originalMessage) {
+                                    updatechatAutoScroll();
                                     messageTextElem.innerText = `[블라인드된 메시지] ${originalMessage}`;
+                                    chatScrollToBottom();
                                 }
                             }
                         }
