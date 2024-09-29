@@ -12,6 +12,7 @@
 - [CHZZK Better Shorts Player](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Better_Shorts_Player): 클립 보기 화면에 볼륨 컨트롤러 추가, 동작 개선
 - [CHZZK User Memo](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_User_Memo): 채팅창에 유저 메모 기능을 추가 (Alpha test version)
 - [CHZZK Max Quality](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Max_Quality): 최고 품질로 스트림 재생 시작
+- [CHZZK Hide Blind Chat VOD](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Hide_Blind_Chat_VOD): 치지직 다시보기(VOD) 에서 블라인드된 채팅 메시지를 숨김
 
 ## License
 
