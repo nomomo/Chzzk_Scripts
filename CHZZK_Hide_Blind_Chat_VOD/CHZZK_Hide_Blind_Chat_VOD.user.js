@@ -9,6 +9,7 @@
 // @homepage     https://github.com/nomomo/Chzzk_Scripts/
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Hide_Blind_Chat_VOD/CHZZK_Hide_Blind_Chat_VOD.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Hide_Blind_Chat_VOD/CHZZK_Hide_Blind_Chat_VOD.user.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js
 // @grant        none
 // ==/UserScript==
 
