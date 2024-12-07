@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK User Memo
 // @namespace    CHZZK_User_Memo
-// @version      0.0.1
+// @version      0.0.2
 // @description  치지직에 유저 메모 기능을 추가
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -53,15 +53,15 @@
     
     // 선택자 문자열 정의
     const selectors = {
-        chatListItem: '[class^="live_chatting_list_item__"]',
-        usernameContainer: '[class^="live_chatting_username_container__"]',
-        nameText: '[class^="name_text__"]',
-        chatMessageText: '[class^="live_chatting_message_text__"]',
-        profilePopupContainer: '[class^="live_chatting_popup_profile_container__"]',
-        profilePopupList: '[class^="live_chatting_popup_profile_list__"]',
-        profileUser: '[class^="live_chatting_popup_profile_user__"]',
-        profileControlButton: '[class^="live_chatting_popup_profile_control_button__"]',
-        headerTitle: '[class^="live_chatting_header_title__"]'
+        chatListItem: '[class*="live_chatting_list_item__"]',
+        usernameContainer: '[class*="live_chatting_username_container__"]',
+        nameText: '[class*="name_text__"]',
+        chatMessageText: '[class*="live_chatting_message_text__"]',
+        profilePopupContainer: '[class*="live_chatting_popup_profile_container__"]',
+        profilePopupList: '[class*="live_chatting_popup_profile_list__"]',
+        profileUser: '[class*="live_chatting_popup_profile_user__"]',
+        profileControlButton: '[class*="live_chatting_popup_profile_control_button__"]',
+        headerTitle: '[class*="live_chatting_header_title__"]'
     };
 
     const OriginalWebSocket = unsafeWindow.WebSocket;
