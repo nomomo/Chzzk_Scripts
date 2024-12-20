@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Live Progress Slider
 // @namespace    CHZZK_Live_Progress_Slider
-// @version      0.0.2
+// @version      0.0.3
 // @description  Show the live progress slider on Chzzk
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -72,9 +72,9 @@
                 newElement.setAttribute('aria-live', 'off');
                 newElement.classList.add('pzp-pc-vod-time', 'pzp-pc__vod-time');
                 newElement.innerHTML = `
-                <span role="text" class="pzp-ui-text pzp-pc-vod-time__current-time">0:00</span>
-                <div class="pzp-pc-vod-time__bar"></div>
-                <span role="text" class="pzp-ui-text pzp-pc-vod-time__duration">0:00</span>`;
+                <span role="text" class="pzp-ui-text pzp-pc-vod-time__current-time" style="margin-right:3px;">0:00</span>
+                <div class="pzp-vod-time__bar">/</div>
+                <span role="text" class="pzp-ui-text pzp-pc-vod-time__duration" style="margin-left:3px;">0:00</span>`;
 
                 liveTimeContainer.parentNode.insertBefore(newElement, liveTimeContainer);
 
@@ -89,7 +89,7 @@
         let slider = document.querySelector('.pzp-pc .pzp-pc__progress-slider');
         let progressPlayed = document.querySelector('.pzp-ui-progress__played');
         let handler = document.querySelector('.pzp-ui-slider__handler-wrap');
-        let previewTime = document.querySelector('.pzp-pc-seeking-preview__time');
+        let previewTime = document.querySelector('.pzp-seeking-preview__time');
         let currentTimeText = document.querySelector('.pzp-pc-vod-time__current-time');
         let timeDurationText = document.querySelector('.pzp-pc-vod-time__duration');
         let dragging = false;
