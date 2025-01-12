@@ -42,40 +42,46 @@
         return `${hours}:${minutes}:${secs}`;
     }
 
+    let liveOpenDate = "";
+
     // Main function to add realtime display
     function addRealtimeDisplay() {
         fetch("https://api.chzzk.naver.com/service/v2/videos/" + window.location.pathname.split('/').pop())
             .then((response) => response.json())
             .then((data) => {
-                const liveOpenDate = new Date(data.content.liveOpenDate);
+                liveOpenDate = new Date(data.content.liveOpenDate);
                 console.log("Live Open Date:", liveOpenDate);
-
-                // Detect slider element and add event listeners
-                document.arrive('div[role="slider"]', { existing: true }, function (slider) {
-                    slider.addEventListener('mousemove', () => {
-                        const timerElement = document.querySelector('.pzp-seeking-preview__time');
-                        if (timerElement) {
-                            const videoTimeText = timerElement.textContent.trim();
-                            const videoTimeInSeconds = timeStringToSeconds(videoTimeText);
-
-                            // Calculate real-time
-                            const realTime = new Date(liveOpenDate.getTime() + videoTimeInSeconds * 1000);
-                            const formattedTime = realTime.toLocaleString();
-
-                            // Create or update the realtime div
-                            let realtimeDiv = timerElement.nextElementSibling;
-                            if (!realtimeDiv || !realtimeDiv.classList.contains('realtime-display')) {
-                                realtimeDiv = document.createElement('div');
-                                realtimeDiv.className = 'realtime-display';
-                                timerElement.parentElement.appendChild(realtimeDiv);
-                            }
-                            realtimeDiv.textContent = `${formattedTime}`;
-                        }
-                    });
-                });
             })
             .catch((error) => console.error("Error fetching video metadata:", error));
     }
+
+    // Detect slider element and add event listeners
+    document.arrive('div[role="slider"]', { existing: true }, function (slider) {
+        slider.addEventListener('mousemove', () => {
+            if(liveOpenDate == "") {
+                return;
+            }
+            const timerElement = document.querySelector('.pzp-seeking-preview__time');
+            console.log("event");
+            if (timerElement) {
+                const videoTimeText = timerElement.textContent.trim();
+                const videoTimeInSeconds = timeStringToSeconds(videoTimeText);
+
+                // Calculate real-time
+                const realTime = new Date(liveOpenDate.getTime() + videoTimeInSeconds * 1000);
+                const formattedTime = realTime.toLocaleString();
+
+                // Create or update the realtime div
+                let realtimeDiv = timerElement.nextElementSibling;
+                if (!realtimeDiv || !realtimeDiv.classList.contains('realtime-display')) {
+                    realtimeDiv = document.createElement('div');
+                    realtimeDiv.className = 'realtime-display';
+                    timerElement.parentElement.appendChild(realtimeDiv);
+                }
+                realtimeDiv.textContent = `${formattedTime}`;
+            }
+        });
+    });
 
     // Detect URL changes using History API
     function observeUrlChanges() {
@@ -90,13 +96,14 @@
                 if (/https:\/\/chzzk\.naver\.com\/video\/\d+/.test(currentUrl)) {
                     console.log("URL changed to a video page:", currentUrl);
                     addRealtimeDisplay();
+                    return;
                 }
-                else{
-                    let existingRealtimeDiv = document.querySelector('.realtime-display');
-                    if (existingRealtimeDiv) {
-                        existingRealtimeDiv.remove();
-                    }
-                }
+            }
+
+            liveOpenDate = "";
+            const element = document.querySelector('.realtime-display');
+            if (element) {
+                element.style.display = 'none';
             }
         };
 
