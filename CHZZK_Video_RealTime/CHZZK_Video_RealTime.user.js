@@ -62,7 +62,6 @@
                 return;
             }
             const timerElement = document.querySelector('.pzp-seeking-preview__time');
-            console.log("event");
             if (timerElement) {
                 const videoTimeText = timerElement.textContent.trim();
                 const videoTimeInSeconds = timeStringToSeconds(videoTimeText);
