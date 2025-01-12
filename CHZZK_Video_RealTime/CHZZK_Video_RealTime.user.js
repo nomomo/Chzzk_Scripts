@@ -16,6 +16,8 @@
 (function () {
     'use strict';
 
+    let debug = false;
+
     GM_addStyle(`
     .realtime-display {
         color: white;
@@ -43,31 +45,69 @@
     }
 
     let liveOpenDate = "";
+    let totalDuration = 0;
+
+    // Fetch video metadata and calculate total duration for the same liveOpenDate
+    async function fetchVideoMetadata(videoNo) {
+        const url = `https://api.chzzk.naver.com/service/v2/videos/${videoNo}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!data || !data.content) {
+                console.error("Invalid response data:", data);
+                return;
+            }
+
+            const content = data.content;
+            if (debug) console.log(`Processing videoNo: ${content.videoNo}, Title: ${content.videoTitle}, liveOpenDate: ${content.liveOpenDate}, Duration: ${content.duration}`);
+
+            // Check if the liveOpenDate matches
+            if (liveOpenDate === "") {
+                liveOpenDate = new Date(content.liveOpenDate);
+            }
+            else{
+                if (new Date(content.liveOpenDate).getTime() === liveOpenDate.getTime()) {
+                    // Accumulate duration
+                    totalDuration += content.duration;
+                }
+                else {
+                    if (debug) console.log("Different liveOpenDate encountered. Stopping accumulation.");
+                    return;
+                }
+            }
+
+            // Process the next video recursively if it exists
+            if (content.nextVideo) {
+                await fetchVideoMetadata(content.nextVideo.videoNo);
+            }
+        } catch (error) {
+            console.error("Error fetching video metadata:", error);
+        }
+    }
 
     // Main function to add realtime display
     function addRealtimeDisplay() {
-        fetch("https://api.chzzk.naver.com/service/v2/videos/" + window.location.pathname.split('/').pop())
-            .then((response) => response.json())
-            .then((data) => {
-                liveOpenDate = new Date(data.content.liveOpenDate);
-                console.log("Live Open Date:", liveOpenDate);
-            })
-            .catch((error) => console.error("Error fetching video metadata:", error));
+        const videoNo = window.location.pathname.split('/').pop();
+        totalDuration = 0; // Reset duration
+        liveOpenDate = ""; // Reset liveOpenDate
+        fetchVideoMetadata(videoNo).then(() => {
+            if (debug) console.log("Total accumulated duration:", totalDuration);
+        });
     }
 
     // Detect slider element and add event listeners
     document.arrive('div[role="slider"]', { existing: true }, function (slider) {
-        slider.addEventListener('mousemove', () => {
-            if(liveOpenDate == "") {
-                return;
-            }
+        function handleMouseMove() {
+            if (liveOpenDate === "") return;
+
             const timerElement = document.querySelector('.pzp-seeking-preview__time');
             if (timerElement) {
                 const videoTimeText = timerElement.textContent.trim();
                 const videoTimeInSeconds = timeStringToSeconds(videoTimeText);
 
-                // Calculate real-time
-                const realTime = new Date(liveOpenDate.getTime() + videoTimeInSeconds * 1000);
+                // Calculate real-time with total duration offset
+                const realTime = new Date(liveOpenDate.getTime() + (videoTimeInSeconds + totalDuration) * 1000);
                 const formattedTime = realTime.toLocaleString();
 
                 // Create or update the realtime div
@@ -79,7 +119,9 @@
                 }
                 realtimeDiv.textContent = `${formattedTime}`;
             }
-        });
+        }
+
+        slider.addEventListener('mousemove', handleMouseMove);
     });
 
     // Detect URL changes using History API
@@ -93,7 +135,7 @@
 
                 // Check if the new URL is a video page
                 if (/https:\/\/chzzk\.naver\.com\/video\/\d+/.test(currentUrl)) {
-                    console.log("URL changed to a video page:", currentUrl);
+                    if (debug) console.log("URL changed to a video page:", currentUrl);
                     addRealtimeDisplay();
                     return;
                 }
