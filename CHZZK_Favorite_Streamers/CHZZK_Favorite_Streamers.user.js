@@ -6,8 +6,8 @@
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
 // @homepageURL  https://github.com/nomomo/Chzzk_Scripts/
-// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
-// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
+// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamers/CHZZK_Favorite_Streamers.user.js
+// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamers/CHZZK_Favorite_Streamers.user.js
 // @run-at       document-start
 // @grant        unsafeWindow
 // @grant        GM.getValue
