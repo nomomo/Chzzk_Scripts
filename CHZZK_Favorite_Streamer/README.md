@@ -1,4 +1,4 @@
-# CHZZK Favorite Streamers
+# CHZZK Favorite Streamer
 
 - Chzzk의 팔로우 메뉴에서 즐겨찾는 스트리머를 설정할 수 있습니다.
 - 즐겨찾기에 추가된 스트리머는 팔로우 메뉴의 맨 위에 표시됩니다.
@@ -25,7 +25,7 @@ https://github.com/nomomo/Chzzk_Scripts/assets/863079/0c12f628-0df4-48e0-876d-a7
 ### STEP 2. UserScript
 
 - 유저스크립트 관리 확장기능 설치 후 아래의 링크를 클릭하세요. 이후 뜨는 창에서 "설치" 버튼을 눌러 스크립트를 설치합니다.
-  - [https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamers/CHZZK_Favorite_Streamers.user.js](https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamers/CHZZK_Favorite_Streamers.user.js)
+  - [https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js](https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js)
 
 이것으로 설치는 끝입니다. 즐겁게 사용하세요~
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Restore Blind Chat
 // @namespace    CHZZK_Restore_Blind_Chat
-// @version      0.0.2
+// @version      0.0.3
 // @description  Restore original chat messages when they are hidden by the admin
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -74,7 +74,7 @@
         if (node.nodeType === 1 && classStartsWith(node, 'live_chatting_list_item__')) {
             const messageTextElem = node.querySelector('[class^="live_chatting_message_text__"]');
             if (messageTextElem) {
-                const messageIdElem = node.querySelector('[class^="live_chatting_message_wrapper__"]');
+                const messageIdElem = node.querySelector('[class^="live_chatting_username_nickname__"]');
                 if (messageTextElem && messageIdElem) {
                     const messageText = messageTextElem.innerText;
                     // Store the original message in a data attribute
