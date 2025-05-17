@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         CHZZK Favorite Streamer
 // @namespace    CHZZK_Favorite_Streamer
-// @version      0.0.2
+// @version      0.0.3
 // @description  즐겨찾는 스트리머를 목록 상단에 표시하는 스크립트
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
-// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/
+// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_Favorite_Streamers/
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @run-at       document-start
@@ -744,6 +744,17 @@
                 //chosenClass: 'chosen',    // 선택된 엘리먼트 스타일
                 handle: '[class^="video_card_container__"]',
                 onEnd: async function (evt) {
+                    // 마우스 커서 좌표 가져오기
+                    const e = evt.originalEvent || {};
+                    const x = e.clientX, y = e.clientY;
+                    // 리스트의 화면 상 위치
+                    const rect = componentList[0].getBoundingClientRect();
+                    // 밖에 떨궜으면
+                    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                        reorderList();
+                        return;
+                    }
+
                     const items = Array.from(componentList.children());
                     const draggedItem = $(evt.item);
                     const draggedIndex = evt.newIndex;
@@ -789,7 +800,14 @@
                     reorderList();
                 },
                 setData: function (dataTransfer, dragEl) {
-                    dataTransfer.setData('Text', $(dragEl).text());
+                    const channelLink = $(dragEl).find('[class^="video_card_thumbnail__"]').attr('href');
+                    if (channelLink) {
+                        const fullUrl = new URL(channelLink, window.location.origin).href;
+                        dataTransfer.setData('text/plain', fullUrl);
+                        dataTransfer.setData('text/uri-list', fullUrl);
+                    } else {
+                        dataTransfer.setData('text/plain', $(dragEl).text());
+                    }
                 },
                onStart: updateCurrentItemOnDrag,
                onChange: updateCurrentItemOnDrag
@@ -808,7 +826,7 @@
             const buttons = videoInfoControl.find('button');
             if (!buttons.length) return;
 
-            const buttonContainer = buttons.filter((_, btn) => $(btn).attr('class').includes('button_container__')).first();
+            const buttonContainer = buttons.filter((_, btn) => $(btn).attr('class').includes('button_container__')).last();
             const buttonMedium = buttons.filter((_, btn) => $(btn).attr('class').includes('button_medium__')).first();
             const buttonCircle = buttons.filter((_, btn) => $(btn).attr('class').includes('button_circle__')).first();
             let buttonColor = buttons.filter((_, btn) => $(btn).attr('class').includes('button_dark__')).first();
@@ -820,17 +838,32 @@
             const buttonMediumClass = getClassWithPrefix(buttonMedium, 'button_medium__');
             const buttonCircleClass = getClassWithPrefix(buttonCircle, 'button_circle__');
             const buttonColorClass = getClassWithPrefix(buttonColor, 'button_dark__') || getClassWithPrefix(buttonColor, 'button_white__');
+            const buttonIconContainerClass = getClassWithPrefix(buttonContainer, 'button_icon_container__');
+            const buttonLargerClass = getClassWithPrefix(buttonContainer, 'button_larger__');
 
             let favClass = "";
             const channelId = getChannelId();
             const favIndex = favoriteStreamers.findIndex(fav => fav.channelId === channelId);
+            console.log("buttonIconContainerClass", buttonIconContainerClass);
             if (favIndex !== -1) {
                 favClass = "favorite";
             }
 
             const favoriteButton = $('<button>', {
                 type: 'button',
-                class: `favorite-star-button ${favClass} ${buttonContainerClass} ${buttonMediumClass} ${buttonCircleClass} ${buttonColorClass}`,
+                class: [
+                    'favorite-star-button',
+                    favClass,
+                    buttonContainerClass,
+                    buttonMediumClass,
+                    buttonCircleClass,
+                    buttonColorClass,
+                    buttonIconContainerClass,
+                    buttonLargerClass
+                ]
+                // 빈 문자열 제거
+                .filter(Boolean)
+                .join(' '),
                 html: '★'
             });
 
@@ -873,7 +906,7 @@
     }
 
     function getChannelId() {
-        const linkElem = $('p[class^="video_information_name__"] a[class^="video_information_link__"]').first();
+        const linkElem = $('[class^="video_information_name__"] [class^="video_information_link__"]').first();
         if (linkElem.length) {
             return linkElem.attr('href').split('/').pop();
         }
@@ -881,7 +914,7 @@
     }
 
     function getChannelName() {
-        const nameElem = $('p[class^="video_information_name__"] span[class^="name_text__"]').first();
+        const nameElem = $('[class^="video_information_name__"] [class^="name_text__"]').first();
         if (nameElem.length) {
             return nameElem.text().split('\n')[0];
         }
