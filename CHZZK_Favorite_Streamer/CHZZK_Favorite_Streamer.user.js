@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         CHZZK Favorite Streamer
 // @namespace    CHZZK_Favorite_Streamer
-// @version      0.0.3
+// @version      0.0.4
 // @description  즐겨찾는 스트리머를 목록 상단에 표시하는 스크립트
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
-// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_Favorite_Streamers/
+// @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_Favorite_Streamer/
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @run-at       document-start
@@ -131,6 +131,9 @@
     justify-content: center;
     align-items: center;
 }
+/*div[class^="button_tab_list"][role="tablist"] {
+    width: 100%;
+}*/
 [class^="component_item__"]:hover .star-container {
     opacity: 1;
     visibility: visible;
@@ -255,10 +258,10 @@
     color: var(--color-content-04);
     margin: 15px 0;
 }
-[class^="following_container__"].starOnly [class^="component_item__"] {
+[class^="component_container__"].starOnly [class^="component_item__"] {
     display: none;
 }
-[class^="following_container__"].starOnly [class^="component_item__"].pinned {
+[class^="component_container__"].starOnly [class^="component_item__"].pinned {
     display: block;
 }
 #LIVE {
@@ -285,6 +288,7 @@
     transition: color 0.3s ease, border-bottom 0.3s ease;
     position: relative;
     color: gray;
+    font-family: Sandoll Nemony2,Apple SD Gothic NEO,Helvetica Neue,Helvetica,나눔고딕,NanumGothic,Malgun Gothic,맑은 고딕,굴림,gulim,새굴림,noto sans,돋움,Dotum,sans-serif;
 }
 .favorite-star-button.favorite {
     color: yellow;
@@ -410,9 +414,11 @@
 
     // 즐겨찾기 버튼 추가 함수
     function addFavoriteTabButton(tabList) {
-        console.log("addFavoriteTabButton");
+        if ($("button#FAVORITE_ONLY").length) return;
+
+        //console.log("addFavoriteTabButton");
         starOnly = false;
-        const followingContainer = $('[class^="following_container__"]');
+        const followingContainer = $('[class^="component_container__"]');
         if (!followingContainer.length) return;
 
         followingContainer.removeClass('starOnly');
@@ -438,14 +444,14 @@
         });
 
         // DOM
-        console.log("Add favorite button");
+        //console.log("Add favorite button");
         const liveButton = $('[class^="button_tab_list__"] button#LIVE');
         liveButton.after(favoriteTabButton);
 
         // favorite 버튼 누른 경우
         favoriteTabButton.on('click', function() {
             starOnly = !starOnly;
-            const followingContainer = $('[class^="following_container__"]');
+            const followingContainer = $('[class^="component_container__"]');
             if (!followingContainer.length) return;
 
             if (starOnly) {
@@ -470,7 +476,7 @@
                 $('#FAVORITE_ONLY').attr('aria-selected', 'true');
             }
 
-            const followingContainer = $('[class^="following_container__"]');
+            const followingContainer = $('[class^="component_container__"]');
             if (!starOnly && followingContainer.length) {
                 followingContainer.removeClass('starOnly');
             }
@@ -490,8 +496,9 @@
     }
 
     // Create tab buttons
-    $(document).arrive('[class^="button_tab_list__"]', { existing: true }, function() {
-        const tabList = $(this);
+    $(document).arrive('[class^="component_container__"]', { existing: true }, function() {
+        const tabList = $('[class^="button_tab_list__"]');
+        if(!tabList.length) return;
         addFavoriteTabButton(tabList);
     });
 
@@ -799,6 +806,9 @@
                     $(evt.item).find('.star-icon').removeClass('yellow');
                     reorderList();
                 },
+                // setData: function (dataTransfer, dragEl) {
+                //     dataTransfer.setData('Text', $(dragEl).text());
+                // },
                 setData: function (dataTransfer, dragEl) {
                     const channelLink = $(dragEl).find('[class^="video_card_thumbnail__"]').attr('href');
                     if (channelLink) {
