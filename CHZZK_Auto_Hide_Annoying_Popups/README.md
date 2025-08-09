@@ -1,6 +1,6 @@
 # CHZZK Auto Hide Annoying Popups
 
-* Chzzk에서 매일 한 번씩 표시되는 이벤트 알림(첫 충전, 첫 구매, 첫 후원)을 뜨지 않도록 함
+* Chzzk에서 매일 한 번씩 표시되는 🐕짜증나는 이벤트 알림(첫 충전, 첫 구매, 첫 후원)을 뜨지 않도록 함
 * 시크릿 모드(Incognito mode) 에서는 정상 동작하지 않을 수 있습니다.
 
 ![preview](image.png)
