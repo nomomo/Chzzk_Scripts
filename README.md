@@ -13,6 +13,7 @@
 - [CHZZK Max Quality](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Max_Quality): 최고 품질로 스트림 재생 시작
 - [CHZZK Hide Blind Chat VOD](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Hide_Blind_Chat_VOD): 치지직 다시보기(VOD) 에서 블라인드된 채팅 메시지를 숨김
 - [CHZZK Video RealTime](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Video_RealTime): CHZZK 다시보기 비디오의 슬라이더 바에 마우스를 올렸을 때, 비디오의 실제 시간을 표시
+- [CHZZK Auto Hide Annoying Popups](https://github.com/nomomo/Chzzk_Scripts/tree/main/CHZZK_Auto_Hide_Annoying_Popups): Chzzk에서 매일 한 번씩 표시되는 이벤트 알림(첫 충전, 첫 구매, 첫 후원)을 뜨지 않도록 함
 
 ## 🪦 Deprecated Scripts
 
