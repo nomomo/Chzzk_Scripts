@@ -15,9 +15,6 @@
 (() => {
   'use strict';
 
-  // --- 치환 규칙: 필요 시 규칙 추가
-  const RULES = [{ re: /데굴/g, to: '시발' }, { re: /떼굴/g, to: '씨발' }, { re: /데꿀/g, to: '시빨' }, { re: /떼꿀/g, to: '씨빨' }, { re: /ㄷㄱ/g, to: 'ㅅㅂ' }, { re: /ㄸㄱ/g, to: 'ㅆㅂ' }, { re: /ㄸㄲ/g, to: 'ㅆㅃ' }];
-
   // --- 동적으로 변하는 입력창 클래스의 접두사
   const DYNAMIC_CLASS_PREFIXES = ['live_chatting_input_input__'];
 
@@ -32,11 +29,23 @@
   ];
   const SKIP_SELECTOR_STR = SKIP_SELECTORS.join(',');
 
-  /** 문자열 치환 */
+  /**
+   * 텍스트 치환:
+   *  - '데…굴' → '시…발',   '떼…굴' → '씨…발'
+   *  - '데…꿀' → '시…빨',   '떼…꿀' → '씨…빨'
+   *  (… 위치의 특수문자/공백 시퀀스는 그대로 보존)
+   *
+   * 정규식 설명:
+   *  (떼|데)              : 첫 글자
+   *  ([^가-힣A-Za-z0-9]*) : 한글/영문/숫자를 제외한 임의의 문자들(공백 포함) — 중간 기호를 보존
+   *  (꿀|굴)              : 마지막 글자
+   */
   function replaceText(s) {
-    let out = s;
-    for (const { re, to } of RULES) out = out.replace(re, to);
-    return out;
+    return s.replace(/(떼|데)([^가-힣A-Za-z0-9]*)(꿀|굴)/gu, (_, head, mid, tail) => {
+      const first = head === '떼' ? '씨' : '시';
+      const last  = tail === '꿀' ? '빨' : '발';
+      return first + mid + last;
+    });
   }
 
   /** 요소가 주어진 클래스 접두사 중 하나를 갖는지 확인 */
