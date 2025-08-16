@@ -16,7 +16,7 @@
   'use strict';
 
   // --- 치환 규칙: 필요 시 규칙 추가
-  const RULES = [{ re: /데굴/g, to: '시발' }];
+  const RULES = [{ re: /데굴/g, to: '시발' }, { re: /떼굴/g, to: '씨발' }, { re: /데꿀/g, to: '시빨' }, { re: /떼꿀/g, to: '씨빨' }, { re: /ㄷㄱ/g, to: 'ㅅㅂ' }, { re: /ㄸㄱ/g, to: 'ㅆㅂ' }, { re: /ㄸㄲ/g, to: 'ㅆㅃ' }];
 
   // --- 동적으로 변하는 입력창 클래스의 접두사
   const DYNAMIC_CLASS_PREFIXES = ['live_chatting_input_input__'];
