@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK 데굴어 통역기
 // @namespace    CHZZK_Degul_Interpreter
-// @version      0.0.1
+// @version      0.0.2
 // @description  치지직에서 '데굴'을 실제 뜻으로 번역해 보여줍니다.
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
@@ -31,21 +31,31 @@
 
   /**
    * 텍스트 치환:
-   *  - '데…굴' → '시…발',   '떼…굴' → '씨…발'
-   *  - '데…꿀' → '시…빨',   '떼…꿀' → '씨…빨'
-   *  (… 위치의 특수문자/공백 시퀀스는 그대로 보존)
+   *  A) 단어형
+   *   - '데…굴' → '시…발',   '떼…굴' → '씨…발'
+   *   - '데…꿀' → '시…빨',   '떼…꿀' → '씨…빨'
+   *  B) 자모 축약형
+   *   - 'ㄷ…ㄱ' → 'ㅅ…ㅂ',   'ㄸ…ㄱ' → 'ㅆ…ㅂ'
+   *   - 'ㄷ…ㄲ' → 'ㅅ…ㅃ',   'ㄸ…ㄲ' → 'ㅆ…ㅃ'
    *
-   * 정규식 설명:
-   *  (떼|데)              : 첫 글자
-   *  ([^가-힣A-Za-z0-9]*) : 한글/영문/숫자를 제외한 임의의 문자들(공백 포함) — 중간 기호를 보존
-   *  (꿀|굴)              : 마지막 글자
+   * 가운데의 특수문자/공백 시퀀스(…)는 그대로 보존.
    */
   function replaceText(s) {
-    return s.replace(/(떼|데)([^가-힣A-Za-z0-9]*)(꿀|굴)/gu, (_, head, mid, tail) => {
+    // 단어형(데/떼 … 꿀/굴)
+    let out = s.replace(/(떼|데)([^가-힣A-Za-z0-9]*)(꿀|굴)/gu, (_, head, mid, tail) => {
       const first = head === '떼' ? '씨' : '시';
       const last  = tail === '꿀' ? '빨' : '발';
       return first + mid + last;
     });
+
+    // 자모 축약형(ㄷ/ㄸ … ㄱ/ㄲ)
+    out = out.replace(/(ㄸ|ㄷ)([^가-힣A-Za-z0-9]*)(ㄲ|ㄱ)/gu, (_, head, mid, tail) => {
+      const first = head === 'ㄸ' ? 'ㅆ' : 'ㅅ';
+      const last  = tail === 'ㄲ' ? 'ㅃ' : 'ㅂ';
+      return first + mid + last;
+    });
+
+    return out;
   }
 
   /** 요소가 주어진 클래스 접두사 중 하나를 갖는지 확인 */
@@ -101,7 +111,6 @@
       const after = replaceText(before);
       if (before !== after) edits.push([n, after]);
     }
-    // 레이아웃 스랏싱 최소화를 위해 일괄 반영
     for (const [n, after] of edits) n.nodeValue = after;
   }
 
