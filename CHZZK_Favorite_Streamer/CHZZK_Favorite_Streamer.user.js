@@ -2,12 +2,12 @@
 // @name         CHZZK Favorite Streamer
 // @namespace    CHZZK_Favorite_Streamer
 // @version      0.0.4
+// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
+// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @description  즐겨찾는 스트리머를 목록 상단에 표시하는 스크립트
 // @author       Nomo
 // @match        https://chzzk.naver.com/*
 // @homepageURL  https://github.com/nomomo/Chzzk_Scripts/CHZZK_Favorite_Streamer/
-// @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
-// @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @run-at       document-start
 // @grant        unsafeWindow
 // @grant        GM.getValue
@@ -134,7 +134,7 @@
 /*div[class^="button_tab_list"][role="tablist"] {
     width: 100%;
 }*/
-[class^="component_item__"]:hover .star-container {
+ul[class*="_flex_wrap_"][class*="_type_default_"] > *:hover .star-container {
     opacity: 1;
     visibility: visible;
 }
@@ -258,11 +258,11 @@
     color: var(--color-content-04);
     margin: 15px 0;
 }
-[class^="component_container__"].starOnly [class^="component_item__"] {
+body.starOnly ul[class*="_flex_wrap_"][class*="_type_default_"] > * {
     display: none;
 }
-[class^="component_container__"].starOnly [class^="component_item__"].pinned {
-    display: block;
+body.starOnly ul[class*="_flex_wrap_"][class*="_type_default_"] > *.pinned {
+    display: list-item;
 }
 #LIVE {
     border-top-left-radius: 15px;
@@ -418,12 +418,12 @@
 
         //console.log("addFavoriteTabButton");
         starOnly = false;
-        const followingContainer = $('[class^="component_container__"]');
+        const followingContainer = $('body');
         if (!followingContainer.length) return;
 
         followingContainer.removeClass('starOnly');
 
-        const tabItemClass = tabList.children().filter((_, child) => $(child).attr('class').startsWith('button_tab_item__')).attr('class');
+        const tabItemClass = tabList.find('button#LIVE').attr('class');
         const favoriteTabButton = $('<button>', {
             type: 'button',
             id: 'FAVORITE_ONLY',
@@ -434,7 +434,7 @@
         });
 
         // 일단 버튼 누를 때 favorite 선택 상태 끄기
-        $('[class^="button_tab_list__"] button').on('click', function() {
+        tabList.find('button').on('click', function() {
             favoriteTabButton.attr('aria-selected', 'false');
             if (!liveBtnSimulated) {
                 starOnly = false;
@@ -445,13 +445,13 @@
 
         // DOM
         //console.log("Add favorite button");
-        const liveButton = $('[class^="button_tab_list__"] button#LIVE');
+        const liveButton = tabList.find('button#LIVE');
         liveButton.after(favoriteTabButton);
 
         // favorite 버튼 누른 경우
         favoriteTabButton.on('click', function() {
             starOnly = !starOnly;
-            const followingContainer = $('[class^="component_container__"]');
+            const followingContainer = $('body');
             if (!followingContainer.length) return;
 
             if (starOnly) {
@@ -476,7 +476,7 @@
                 $('#FAVORITE_ONLY').attr('aria-selected', 'true');
             }
 
-            const followingContainer = $('[class^="component_container__"]');
+            const followingContainer = $('body');
             if (!starOnly && followingContainer.length) {
                 followingContainer.removeClass('starOnly');
             }
@@ -496,14 +496,16 @@
     }
 
     // Create tab buttons
-    $(document).arrive('[class^="component_container__"]', { existing: true }, function() {
-        const tabList = $('[class^="button_tab_list__"]');
+    $(document).arrive('button#LIVE', { existing: true }, function() {
+        const tabList = $('button#LIVE').closest('[role="tablist"]');
         if(!tabList.length) return;
         addFavoriteTabButton(tabList);
     });
 
     // 즐겨찾기 리스트 모달 표시 함수
-    function showFavoriteListModal() {
+    async function showFavoriteListModal() {
+        await normalizeFavoriteNamesFromApi();
+
         // 기존 모달 제거
         $('.favorite-list-container').remove();
 
@@ -616,9 +618,61 @@
     //////////////////////////////
     // Lists
     //////////////////////////////
+    const followingListSelector = 'ul[class*="_flex_wrap_"][class*="_type_default_"]';
+    const followingChannelSelector = 'a[href*="/live/"]';
+
+    function getChannelLinkFromItem(item) {
+        return $(item).find(followingChannelSelector).filter((_, link) => {
+            try {
+                return /\/live\/[^/?#]+/.test(new URL(link.href, location.origin).pathname);
+            } catch (e) {
+                return false;
+            }
+        }).first();
+    }
+
+    function getChannelIdFromItem(item) {
+        const channelLink = getChannelLinkFromItem(item);
+        const href = channelLink.attr('href');
+        return href ? href.split('/').pop() : '';
+    }
+
+    function findFollowingInfoByChannelId(channelId) {
+        const followingList = jsonResponse && jsonResponse.content && jsonResponse.content.followingList;
+        if (!Array.isArray(followingList)) return null;
+        return followingList.find(info => info && info.channelId === channelId) || null;
+    }
+
+    function pickChannelNameFromInfo(info) {
+        if (!info) return '';
+        const candidates = [
+            info.channelName,
+            info.channel && info.channel.channelName,
+            info.channel && info.channel.name,
+            info.name
+        ];
+        return candidates.find(value => typeof value === 'string' && value.trim()) || '';
+    }
+
+    async function normalizeFavoriteNamesFromApi() {
+        let changed = false;
+        favoriteStreamers.forEach(fav => {
+            const apiName = pickChannelNameFromInfo(findFollowingInfoByChannelId(fav.channelId));
+            if (apiName && fav.name !== apiName) {
+                fav.name = apiName;
+                changed = true;
+            }
+        });
+        if (changed) {
+            await GM.setValue('favoriteStreamers', favoriteStreamers);
+        }
+    }
+
     // 스트리머 아이템에 스타 아이콘 추가
     function addStarIcon(channelElem) {
-        const item = channelElem.closest('li[class^="component_item__"]');
+        const item = channelElem.parents().filter(function() {
+            return this.parentElement && this.parentElement.matches(followingListSelector);
+        }).first();
         if (!item.length) return;
 
         // 기존의 star-container가 존재하면 제거
@@ -627,7 +681,7 @@
             existingStarContainer.remove();
         }
 
-        const videoCardContainer = item.find('[class^="video_card_container__"]');
+        const videoCardContainer = item;
         if (!videoCardContainer.length) return;
 
         const channelId = channelElem.attr('href').split('/').pop();
@@ -670,7 +724,7 @@
 
     // 리스트 재정렬 함수
     function reorderList(favoriteOnly = false) {
-        const container = $('[class^="component_list__"]').first();
+        const container = $(followingListSelector).first();
         if (!container.length) {
             console.error('Container not found');
             return;
@@ -679,26 +733,26 @@
         // 현재 스크롤 위치 저장
         const currentScrollPosition = $(window).scrollTop();
 
-        const items = container.find('li[class^="component_item__"]');
+        const items = container.children();
         const favoriteItems = items.filter((_, item) => {
-            const channelId = $(item).find('[class^="video_card_channel__"]').attr('href').split('/').pop();
+            const channelId = getChannelIdFromItem(item);
             return favoriteStreamers.some(fav => fav.channelId === channelId);
         });
         const nonFavoriteItems = items.filter((_, item) => {
-            const channelId = $(item).find('[class^="video_card_channel__"]').attr('href').split('/').pop();
+            const channelId = getChannelIdFromItem(item);
             return !favoriteStreamers.some(fav => fav.channelId === channelId);
         });
 
         // 고정된 스트리머 먼저, 나머지는 시청자 수 순으로 정렬
         favoriteItems.sort((a, b) => {
-            const aIndex = favoriteStreamers.findIndex(fav => fav.channelId === $(a).find('[class^="video_card_channel__"]').attr('href').split('/').pop());
-            const bIndex = favoriteStreamers.findIndex(fav => fav.channelId === $(b).find('[class^="video_card_channel__"]').attr('href').split('/').pop());
+            const aIndex = favoriteStreamers.findIndex(fav => fav.channelId === getChannelIdFromItem(a));
+            const bIndex = favoriteStreamers.findIndex(fav => fav.channelId === getChannelIdFromItem(b));
             return aIndex - bIndex;
         });
 
         nonFavoriteItems.sort((a, b) => {
-            const aViewers = parseInt($(a).find('[class^="video_card_badge__"]').text().replace(/[^0-9]/g, ''));
-            const bViewers = parseInt($(b).find('[class^="video_card_badge__"]').text().replace(/[^0-9]/g, ''));
+            const aViewers = parseInt($(a).text().replace(/[^0-9]/g, '')) || 0;
+            const bViewers = parseInt($(b).text().replace(/[^0-9]/g, '')) || 0;
             return bViewers - aViewers;
         });
 
@@ -707,7 +761,7 @@
         const combinedItems = favoriteOnly ? favoriteItems : favoriteItems.add(nonFavoriteItems);
         combinedItems.each((_, item) => {
             container.append(item);
-            addStarIcon($(item).find('[class^="video_card_channel__"]'));
+            addStarIcon(getChannelLinkFromItem(item));
         });
 
         // 스크롤 위치 복원
@@ -716,18 +770,28 @@
 
     // 채널 이름 가져오는 함수
     function getChannelNameFromList(item) {
+        const channelId = getChannelIdFromItem(item);
+        const apiName = pickChannelNameFromInfo(findFollowingInfoByChannelId(channelId));
+        if (apiName) return apiName;
+
         const nameElem = item.find('span[class^="name_text__"]').first();
         if (nameElem.length) {
             return nameElem.text().split('\n')[0];
         }
+        const channelLink = getChannelLinkFromItem(item);
+        if (channelLink.length) {
+            const text = channelLink.text().replace(/\s+/g, ' ').trim().split('\n')[0];
+            if (text) return text;
+            return channelId;
+        }
         return "Unknown";
     }
 
-    $(document).arrive('li[class^="component_item__"] [class^="video_card_channel__"]', { existing: true }, function() {
+    $(document).arrive('ul[class*="_flex_wrap_"][class*="_type_default_"] a[href*="/live/"]', { existing: true }, function() {
         const elem = $(this);
         addStarIcon(elem);
 
-        const componentList = $('ul[class^="component_list__"]').first();
+        const componentList = $(followingListSelector).first();
         if (componentList.length) {
 
             function updateCurrentItemOnDrag(evt){
@@ -749,7 +813,7 @@
                 //handle: '.star-container',
                 ghostClass: 'ghost',     // 드래그 중 엘리먼트 스타일
                 //chosenClass: 'chosen',    // 선택된 엘리먼트 스타일
-                handle: '[class^="video_card_container__"]',
+                handle: 'a[href*="/live/"]',
                 onEnd: async function (evt) {
                     // 마우스 커서 좌표 가져오기
                     const e = evt.originalEvent || {};
@@ -765,7 +829,7 @@
                     const items = Array.from(componentList.children());
                     const draggedItem = $(evt.item);
                     const draggedIndex = evt.newIndex;
-                    const draggedChannelId = draggedItem.find('[class^="video_card_channel__"]').attr('href').split('/').pop();
+                    const draggedChannelId = getChannelIdFromItem(draggedItem);
 
                     const pinnedItems = items.filter(item => $(item).hasClass('pinned') && item !== draggedItem[0]);
                     const startIndex = items.indexOf(pinnedItems[0]);
@@ -782,7 +846,7 @@
                     if (draggedIndex < startIndex) {
                         const nextItem = $(items[draggedIndex + 1]);
                         if (nextItem && nextItem.hasClass('pinned')) {
-                            const nextChannelId = nextItem.find('[class^="video_card_channel__"]').attr('href').split('/').pop();
+                            const nextChannelId = getChannelIdFromItem(nextItem);
                             const nextFavIndex = favoriteStreamers.findIndex(fav => fav.channelId === nextChannelId);
                             if (nextFavIndex !== -1) {
                                 favoriteStreamers.splice(nextFavIndex, 0, { channelId: draggedChannelId, name: getChannelNameFromList(draggedItem) });
@@ -795,7 +859,7 @@
                     } else {
                         const prevItem = $(items[draggedIndex - 1]);
                         if (prevItem.length && prevItem.hasClass('pinned')) {
-                            const prevChannelId = prevItem.find('[class^="video_card_channel__"]').attr('href').split('/').pop();
+                            const prevChannelId = getChannelIdFromItem(prevItem);
                             const prevFavIndex = favoriteStreamers.findIndex(fav => fav.channelId === prevChannelId);
                             favoriteStreamers.splice(prevFavIndex + 1, 0, { channelId: draggedChannelId, name: getChannelNameFromList(draggedItem) });
                         }
@@ -810,7 +874,7 @@
                 //     dataTransfer.setData('Text', $(dragEl).text());
                 // },
                 setData: function (dataTransfer, dragEl) {
-                    const channelLink = $(dragEl).find('[class^="video_card_thumbnail__"]').attr('href');
+                    const channelLink = getChannelLinkFromItem(dragEl).attr('href');
                     if (channelLink) {
                         const fullUrl = new URL(channelLink, window.location.origin).href;
                         dataTransfer.setData('text/plain', fullUrl);
