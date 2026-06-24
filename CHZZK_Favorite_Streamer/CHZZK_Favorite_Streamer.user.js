@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CHZZK Favorite Streamer
 // @namespace    CHZZK_Favorite_Streamer
-// @version      0.0.4
+// @version      0.0.5
 // @downloadURL  https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @updateURL    https://github.com/nomomo/Chzzk_Scripts/raw/main/CHZZK_Favorite_Streamer/CHZZK_Favorite_Streamer.user.js
 // @description  즐겨찾는 스트리머를 목록 상단에 표시하는 스크립트
